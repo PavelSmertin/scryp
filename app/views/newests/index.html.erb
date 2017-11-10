@@ -1,0 +1,80 @@
+
+<%= link_to 'New Newest', new_newest_path %>
+
+
+    <p id="notice"><%= notice %></p>
+
+
+    <ol class="newest_items">
+
+      <% @newests.each do |newest| %>
+      <li class="newest_item">
+        <div class="newest">
+          <div class="newest_item_header">
+
+            <a class="user_block" href="#">
+              <%= image_tag('ava_bis.jpg', :class => "avatar") %>
+              <span class="username">Otto Fon</span>
+            </a>
+
+            <a class="coin_block" href="#">
+              <img class="logo_coin" src="<%= !newest.event.nil? ? newest.event.coin.logo_url : '' %>" alt="">
+              <strong class="coinname"><%= !newest.event.nil? ? newest.event.coin.name : '' %></strong>
+              <span class="newest_timestamp" title="5:40 PM - 8 Nov 2017">
+                <span class="_timestamp" data-time="1510141252"><%= time_ago_in_words(newest.created_at) %></span>
+              </span>
+            </a>
+
+            <button class="newest_butter_menu action_button" type="button">
+                <div class="icon_container" title="More">
+                  <span class="butter_icon_dots"></span>
+                  <span class="action_button_label">More</span>
+                </div>
+            </button>
+          </div>
+    
+
+          <p class="newest_text">
+            <span class="event_header"><%= !newest.event.nil? && !newest.event.start_time.nil? ? newest.event.start_time.strftime("%d %h %Y") : '' %></span> 
+            <span class="event_header"><%= !newest.event.nil? && !newest.event.end_time.nil? ? ' - '+ newest.event.end_time.strftime("%d %h %Y") : '' %></span> 
+            <%= newest.text %>
+            <br>
+            <a href="<%= newest.link %>" rel="nofollow" ><%= newest.link %></a>
+          </p>
+
+      
+          <div>
+
+            <div class="newest_item_footer">
+              <button class="action_button">
+                <div class="icon_container" title="Date">
+                  <span class="icon_date"></span>
+                  <span class = "action_button_label">Date</span>
+                </div>
+              </button>
+
+              <div class="action_list">
+                <button class="action_positive action_button">
+                  23 positive
+                </button>
+                <button class="action_negative action_button">
+                  2 negative
+                </button>
+              </div>
+
+              <button class="action_button">
+                <div class="icon_container" title="Share">
+                  <span class="icon_share"></span>
+                  <span class = "action_button_label">Share</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <% end %>
+
+    </ol>
+
+

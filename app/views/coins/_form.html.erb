@@ -1,0 +1,32 @@
+<%= form_with(model: coin, local: true,  html: { multipart: true }) do |form| %>
+  <% if coin.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(coin.errors.count, "error") %> prohibited this coin from being saved:</h2>
+
+      <ul>
+      <% coin.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <p>
+    <label>Logo</label>
+    <%= image_tag(@coin.logo_url) if @coin.logo? %>
+    <%= form.file_field :logo %>
+    <%= form.hidden_field :logo_cache %>
+  </p>
+
+  <br>
+
+  <%= form.text_field :name, :placeholder => "name" %>
+  <br>
+  <br>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+  
+<% end %>

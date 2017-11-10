@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  describtion: MyText
+  link: MyString
+  start_time: 2017-11-10 05:20:27
+  end_time: 2017-11-10 05:20:27
+  coin: one
+
+two:
+  title: MyString
+  describtion: MyText
+  link: MyString
+  start_time: 2017-11-10 05:20:27
+  end_time: 2017-11-10 05:20:27
+  coin: two

@@ -1,0 +1,37 @@
+<%= form_with(model: newest, local: true) do |form| %>
+
+  <% if newest.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(newest.errors.count, "error") %> prohibited this newest from being saved:</h2>
+
+      <ul>
+      <% newest.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= fields_for :event, @newest.event do |event_form| %>
+    <%= event_form.collection_select(:coin_id, Coin.all, :id, :name) %>
+    <br>
+    <br>
+    <%= event_form.datetime_field :start_time, :placeholder => "start" %>
+    <label>-</label>
+    <%= event_form.datetime_field :end_time, :placeholder => "end" %>
+    <br>
+    <br>
+    <%= form.text_area :text, :placeholder => "comment" %>
+    <br>
+    <%= form.text_field :link, :placeholder => "link" %>
+
+
+  <% end %>
+
+
+  <br>
+  <br>
+  <div class="actions">
+    <%= form.submit "Create" %>
+  </div>
+
+<% end %>

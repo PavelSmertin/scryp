@@ -1,0 +1,137 @@
+// Place all the styles related to the Newest controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+body {
+	background-color: #eff5f7;
+	font-family: Helvetica;
+	font-size: 14px;
+	color: #000000;
+}
+
+ol, ul {
+	margin: 0;
+    list-style: none;
+    padding: 0;
+}
+
+a{
+	text-decoration: none;
+	color: #3663f3
+}
+
+.newest_items {
+	margin: 0 auto;
+	width: 588px;
+	background-color: #ffffff;
+	border: solid 1px #979797;
+
+	.user_block {
+		float: left;
+		width: 80px;
+		height: 80px;
+	    margin-left: -80px;
+	    position: relative;
+	    text-align: center;
+
+		.avatar {
+			width: 65px;
+			height: 65px;
+		    border-radius: 50%;
+		    position: relative;
+		    margin-bottom: 6px;
+		}
+
+		.username {
+			font-size: 12px;
+			color: #000;
+			text-decoration: underline;
+			position: relative;
+		}
+
+		.username:hover {
+			text-decoration: none;
+		}
+	}
+
+	.logo_coin{
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		display: inline-block;
+		vertical-align:  bottom;
+
+	}
+
+	.coinname{
+		font-size: 16px;
+		height: 32px;
+		line-height: 32px;
+		display: inline-block;
+		vertical-align:  bottom;
+
+	}
+
+	.newest_timestamp {
+		font-size: 12px;
+		height: 32px;
+		line-height: 32px;
+		display: inline-block;
+		vertical-align:  bottom;
+		color: #000;
+	}
+
+	.newest{
+		margin-left: 80px;
+		padding-top: 8px;
+	}
+
+	.newest_text{
+		margin-top: 9px;
+	}
+
+	.event_header{
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	.newest_butter_menu {
+		float: right;
+	    margin: -2px -9px 0 0;
+	    min-width: 0;
+	}
+
+	.butter_icon:before{
+		content: "\f196";
+		display: block;
+	    font-family: "edgeicons";
+	    font-weight: normal;
+	    font-style: normal;
+	    text-align: center;
+	}
+
+	.butter_icon_dots{
+		background-image: url(image_url('61140.svg'));
+	}
+
+	.action_button {
+		background: transparent;
+	    border: 0;
+	    padding: 0;
+	    transition: box-shadow .15s ease-in-out;
+	}
+	.action_button_label{
+		display:none;
+	}
+
+	.action_negative{
+		color: #35763f;
+	}
+
+	.action_positive{
+		color: #b21313;
+	}
+}
+
+
