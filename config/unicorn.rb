@@ -3,7 +3,7 @@ shared_dir = "#{app_dir}/shared"
 
 worker_processes 2
 
-working_directory "#{app_dir}/current" # available in 0.94.0+
+working_directory "#{app_dir}" # available in 0.94.0+
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
