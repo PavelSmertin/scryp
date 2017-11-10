@@ -4,7 +4,7 @@ class NewestsController < ApplicationController
   # GET /newests
   # GET /newests.json
   def index
-    @newests = Newest.all
+    @newests = []
   end
 
   # GET /newests/1
