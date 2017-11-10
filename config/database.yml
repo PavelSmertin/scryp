@@ -22,5 +22,5 @@ test:
 production:
   <<: *default
   database: purn
-  username: deployer
+  username: deploy
   password: 123
