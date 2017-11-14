@@ -13,7 +13,7 @@
     <% @coins.each do |coin| %>
       <tr>
         <td><%= image_tag(coin.logo_url, size: "32x32") if !coin.logo_url.nil? %></td>
-        <td><%= coin.name %></td>
+        <td><%= coin.full_name %></td>
         <td><%= link_to 'Show', coin %></td>
         <td><%= link_to 'Edit', edit_coin_path(coin) %></td>
         <td><%= link_to 'Destroy', coin, method: :delete, data: { confirm: 'Are you sure?' } %></td>

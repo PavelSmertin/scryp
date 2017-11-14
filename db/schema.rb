@@ -10,17 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110041303) do
+ActiveRecord::Schema.define(version: 20171113234753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "coins", force: :cascade do |t|
+  create_table "categories", force: :cascade do |t|
     t.string "name"
-    t.text "link"
+  end
+
+  create_table "coins", force: :cascade do |t|
+    t.json "logo"
+    t.string "symbol"
+    t.string "coin_name"
+    t.string "full_name"
+    t.string "algorithm"
+    t.string "proof_type"
+    t.decimal "fully_premined", precision: 22
+    t.decimal "total_coin_supply", precision: 22
+    t.decimal "pre_mined_value", precision: 22
+    t.decimal "total_coins_free_float", precision: 22
+    t.integer "sort_order"
+    t.boolean "sponsored"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.json "logo"
   end
 
   create_table "events", force: :cascade do |t|
@@ -32,6 +45,8 @@ ActiveRecord::Schema.define(version: 20171110041303) do
     t.bigint "coin_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_events_on_category_id"
     t.index ["coin_id"], name: "index_events_on_coin_id"
   end
 
@@ -41,17 +56,11 @@ ActiveRecord::Schema.define(version: 20171110041303) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "event_id"
+    t.string "image"
     t.index ["event_id"], name: "index_newests_on_event_id"
   end
 
-  create_table "tests", force: :cascade do |t|
-    t.string "name"
-    t.text "link"
-    t.json "logo"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
+  add_foreign_key "events", "categories"
   add_foreign_key "events", "coins"
   add_foreign_key "newests", "events"
 end

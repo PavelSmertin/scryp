@@ -1,4 +1,5 @@
-<%= form_with(model: newest, local: true) do |form| %>
+
+<%= form_with(model: newest, local: true, :class => "form-horizontal") do |form| %>
 
   <% if newest.errors.any? %>
     <div id="error_explanation">
@@ -11,27 +12,89 @@
       </ul>
     </div>
   <% end %>
-  <%= fields_for :event, @newest.event do |event_form| %>
-    <%= event_form.collection_select(:coin_id, Coin.all, :id, :name) %>
-    <br>
-    <br>
-    <%= event_form.datetime_field :start_time, :placeholder => "start" %>
-    <label>-</label>
-    <%= event_form.datetime_field :end_time, :placeholder => "end" %>
-    <br>
-    <br>
-    <%= form.text_area :text, :placeholder => "comment" %>
-    <br>
-    <%= form.text_field :link, :placeholder => "link" %>
 
+
+  <%= fields_for :event, @newest.event do |event_form| %>
+
+  <div class="form-group">
+    <div class="col-sm-6">
+      <div class='input-group date' id='datetimepicker_start'>
+          <%= event_form.text_field :start_time, :class => "form-control", :placeholder => "Start" %>
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class='input-group date' id='datetimepicker_end'>
+          <%= event_form.text_field :end_time, :class => "form-control", :placeholder => "End" %>
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= event_form.collection_select(:category_id, Category.all, :id, :name, {:prompt => "Category"}, {:class=>'form-control'}) %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= event_form.collection_select(:coin_id, Coin.all, :id, :full_name, {:prompt => "Coin"}, {:class=>'form-control'})  %>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= form.text_area :text, :class => "form-control", :placeholder => "Comment", :rows => "4" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= form.text_field :link, :class => "form-control", :placeholder => "Link", :type => "url" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= image_tag(@newest.image_url) if @newest.image? %>
+      <%= form.file_field :image %>
+      <%= form.hidden_field :image_cache %>
+    </div>
+  </div>
 
   <% end %>
 
-
-  <br>
-  <br>
-  <div class="actions">
-    <%= form.submit "Create" %>
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= form.submit "Create", :class => "btn btn-default" %>
+    </div>
   </div>
 
+  <script type="text/javascript">
+      $(function () {
+          $('#datetimepicker_start').datetimepicker({
+              locale: 'ru',
+              format: 'YYYY-MM-DD HH:mm'
+          });
+          $('#datetimepicker_end').datetimepicker({
+              useCurrent: false, //Important! See issue #1075
+              locale: 'ru',
+              format: 'YYYY-MM-DD HH:mm'
+          });
+          $("#datetimepicker_start").on("dp.change", function (e) {
+              $('#datetimepicker_end').data("DateTimePicker").minDate(e.date);
+          });
+          $("#datetimepicker_end").on("dp.change", function (e) {
+              $('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
+          });
+      });
+  </script>
+
 <% end %>
+

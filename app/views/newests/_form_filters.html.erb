@@ -1,0 +1,63 @@
+
+<%= form_for("/newests", :method => "get") do |form| %>
+
+  <div class="form-group">
+    <div class="col-sm-6">
+      <div class='input-group date' id='datetimepicker_start'>
+          <%= form.text_field :start_time, :class => "form-control", :placeholder => "Start" %>
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class='input-group date' id='datetimepicker_end'>
+          <%= form.text_field :end_time, :class => "form-control", :placeholder => "End" %>
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= form.collection_select(:category_id, Category.all, :id, :name, {:prompt => "Category"}, {:class=>'form-control'}) %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= form.collection_select(:coin_id, Coin.all, :id, :full_name, {:prompt => "Coin"}, {:class=>'form-control'})  %>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-12">
+      <%= form.submit "Filter", :class => "btn btn-default" %>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+      $(function () {
+          $('#datetimepicker_start').datetimepicker({
+              locale: 'ru',
+              format: 'YYYY-MM-DD HH:mm'
+          });
+          $('#datetimepicker_end').datetimepicker({
+              useCurrent: false, //Important! See issue #1075
+              locale: 'ru',
+              format: 'YYYY-MM-DD HH:mm'
+          });
+          $("#datetimepicker_start").on("dp.change", function (e) {
+              $('#datetimepicker_end').data("DateTimePicker").minDate(e.date);
+          });
+          $("#datetimepicker_end").on("dp.change", function (e) {
+              $('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
+          });
+      });
+  </script>
+
+<% end %>
+

@@ -13,3 +13,26 @@
  *= require_tree .
  *= require_self
  */
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "bootstrap-datetimepicker";
+
+
+body {
+	background-color: #eff5f7;
+	font-family: Helvetica;
+	font-size: 14px;
+	color: #000000;
+}
+
+ol, ul {
+	margin: 0;
+    list-style: none;
+    padding: 0;
+}
+
+a{
+	text-decoration: none;
+	color: #3663f3
+}

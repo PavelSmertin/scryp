@@ -3,22 +3,28 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
-body {
-	background-color: #eff5f7;
-	font-family: Helvetica;
-	font-size: 14px;
-	color: #000000;
-}
+.main_header{
+	.main_header_center{
+		width: 588px;
+		height: 87px;
+		margin: 0 auto;
+		position:relative;
+		.btn_add {
+			width: 144px;
+			height: 34px;
+			border-radius: 18px;
+			background-color: #2c7e9b;
+			color: #ffffff;
+			display: block;
+			float:right;
+			position: absolute;
+			right:0;
+			top:50%;
+			margin-top: -17px;
+		}
+	}
 
-ol, ul {
-	margin: 0;
-    list-style: none;
-    padding: 0;
-}
 
-a{
-	text-decoration: none;
-	color: #3663f3
 }
 
 .newest_items {
@@ -27,11 +33,19 @@ a{
 	background-color: #ffffff;
 	border: solid 1px #979797;
 
+	.newest_item {
+		border-bottom: solid 1px #979797;
+	}
+
+	.newest_item:last-child {
+		border-bottom: none;
+	}
+
 	.user_block {
 		float: left;
-		width: 80px;
+		width: 96px;
 		height: 80px;
-	    margin-left: -80px;
+	    margin-left: -96px;
 	    position: relative;
 	    text-align: center;
 
@@ -40,7 +54,8 @@ a{
 			height: 65px;
 		    border-radius: 50%;
 		    position: relative;
-		    margin-bottom: 6px;
+		    margin: 5px auto 6px;
+		    display: block;
 		}
 
 		.username {
@@ -70,7 +85,12 @@ a{
 		line-height: 32px;
 		display: inline-block;
 		vertical-align:  bottom;
+	}
 
+	.category_tag{
+		float: right;
+		margin-right: 62px;
+		margin-top: 9px;
 	}
 
 	.newest_timestamp {
@@ -83,16 +103,24 @@ a{
 	}
 
 	.newest{
-		margin-left: 80px;
+		margin-left: 96px;
 		padding-top: 8px;
 	}
 
 	.newest_text{
-		margin-top: 9px;
+		margin-top: 10px;
+	}
+
+	.feed_image {
+		width:470px;
+	}
+	.feed_img_tag{
+		max-width: 100%;
+    	max-height: 100%;
 	}
 
 	.event_header{
-		font-size: 16px;
+		font-size: 18px;
 		font-weight: bold;
 	}
 
@@ -134,4 +162,13 @@ a{
 	}
 }
 
+
+.newest_form.container {
+	width:580px;
+}
+
+.filter_form.container {
+	width:480px;
+	float:left;
+}
 

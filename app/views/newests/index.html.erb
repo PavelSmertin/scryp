@@ -1,80 +1,102 @@
 
-<%= link_to 'New Newest', new_newest_path %>
-
+<div class="main_header">
+  <div class="main_header_center">
+    <%= link_to 'ADD EVENT', new_newest_path, :class => "btn btn-primary btn_add" %>
+  </div>
+</div>
 
     <p id="notice"><%= notice %></p>
 
 
-    <ol class="newest_items">
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Filters
+        </div>
+        <div class="panel-body">
+          <%= render 'form_filters' %>
+        </div>
+      </div>
+    </div>
 
-      <% @newests.each do |newest| %>
-      <li class="newest_item">
-        <div class="newest">
-          <div class="newest_item_header">
 
-            <a class="user_block" href="#">
-              <%= image_tag('ava_bis.jpg', :class => "avatar") %>
-              <span class="username">Otto Fon</span>
-            </a>
+    <div class="col-sm-4">
+      <ol class="newest_items">
 
-            <a class="coin_block" href="#">
-              <img class="logo_coin" src="<%= !newest.event.nil? ? newest.event.coin.logo_url : '' %>" alt="">
-              <strong class="coinname"><%= !newest.event.nil? ? newest.event.coin.name : '' %></strong>
-              <span class="newest_timestamp" title="5:40 PM - 8 Nov 2017">
-                <span class="_timestamp" data-time="1510141252"><%= time_ago_in_words(newest.created_at) %></span>
-              </span>
-            </a>
+        <% @newests.each do |newest| %>
+        <li class="newest_item">
+          <div class="newest">
+            <div class="newest_item_header">
 
-            <button class="newest_butter_menu action_button" type="button">
-                <div class="icon_container" title="More">
-                  <span class="butter_icon_dots"></span>
-                  <span class="action_button_label">More</span>
-                </div>
-            </button>
-          </div>
-    
+              <a class="user_block" href="#">
+                <%= image_tag('ava_bis.jpg', :class => "avatar") %>
+                <span class="username">Otto Fon</span>
+              </a>
 
-          <p class="newest_text">
-            <span class="event_header"><%= !newest.event.nil? && !newest.event.start_time.nil? ? newest.event.start_time.strftime("%d %h %Y") : '' %></span> 
-            <span class="event_header"><%= !newest.event.nil? && !newest.event.end_time.nil? ? ' - '+ newest.event.end_time.strftime("%d %h %Y") : '' %></span> 
-            <%= newest.text %>
-            <br>
-            <a href="<%= newest.link %>" rel="nofollow" ><%= newest.link %></a>
-          </p>
+              <a class="coin_block" href="#">
+                <img class="logo_coin" src="<%= !newest.event.nil? ? newest.event.coin.logo_url : '' %>" alt="">
+                <strong class="coinname"><%= !newest.event.nil? ? newest.event.coin.full_name : '' %></strong>
+                <span class="newest_timestamp" title="5:40 PM - 8 Nov 2017">
+                  <span class="_timestamp" data-time="1510141252"><%= time_ago_in_words(newest.created_at) %></span>
+                </span>
+              </a>
 
-      
-          <div>
+              <span class="category_tag"><%= !newest.event.nil? ? "##{newest.event.category.name}" : '' %></span>
 
-            <div class="newest_item_footer">
-              <button class="action_button">
-                <div class="icon_container" title="Date">
-                  <span class="icon_date"></span>
-                  <span class = "action_button_label">Date</span>
-                </div>
-              </button>
-
-              <div class="action_list">
-                <button class="action_positive action_button">
-                  23 positive
-                </button>
-                <button class="action_negative action_button">
-                  2 negative
-                </button>
-              </div>
-
-              <button class="action_button">
-                <div class="icon_container" title="Share">
-                  <span class="icon_share"></span>
-                  <span class = "action_button_label">Share</span>
-                </div>
+              <button class="newest_butter_menu action_button" type="button">
+                  <div class="icon_container" title="More">
+                    <span class="butter_icon_dots"></span>
+                    <span class="action_button_label">More</span>
+                  </div>
               </button>
             </div>
+      
+
+            <p class="newest_text">
+              <span class="event_header"><%= !newest.event.nil? && !newest.event.start_time.nil? ? newest.event.start_time.strftime("%d %h %Y") : '' %></span> 
+              <span class="event_header"><%= !newest.event.nil? && !newest.event.end_time.nil? ? ' - '+ newest.event.end_time.strftime("%d %h %Y") : '' %></span> 
+              <%= newest.text %>
+              <br>
+              <a href="<%= newest.link %>" rel="nofollow" ><%= newest.link %></a>
+            </p>
+
+            <div class="feed_image">
+               <%= image_tag(newest.image_url, :class => "feed_img_tag") if !newest.image_url.nil? %>
+            </div>
+        
+            <div>
+
+              <div class="newest_item_footer">
+                <button class="action_button">
+                  <div class="icon_container" title="Date">
+                    <span class="icon_date"></span>
+                    <span class = "action_button_label">Date</span>
+                  </div>
+                </button>
+
+                <div class="action_list">
+                  <button class="action_positive action_button">
+                    23 positive
+                  </button>
+                  <button class="action_negative action_button">
+                    2 negative
+                  </button>
+                </div>
+
+                <button class="action_button">
+                  <div class="icon_container" title="Share">
+                    <span class="icon_share"></span>
+                    <span class = "action_button_label">Share</span>
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
 
-      <% end %>
+        <% end %>
 
-    </ol>
+      </ol>
+    </div>
 
 

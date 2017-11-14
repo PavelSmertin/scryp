@@ -4,7 +4,7 @@ class CoinsController < ApplicationController
   # GET /coins
   # GET /coins.json
   def index
-    @coins = Coin.all
+    @coins = Coin.order(sort_order: :asc).all
   end
 
   # GET /coins/1

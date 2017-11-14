@@ -1,5 +1,11 @@
-<h1>Add event</h1>
 
-<%= render 'form', newest: @newest %>
-<br>
-<%= link_to 'Back', newests_path %>
+<div class="newest_form container">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Add event
+		</div>
+		<div class="panel-body">
+			<%= render 'form', newest: @newest %>
+		</div>
+	</div>
+</div>

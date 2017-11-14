@@ -4,7 +4,7 @@ class NewestsController < ApplicationController
   # GET /newests
   # GET /newests.json
   def index
-    @newests = Newest.all
+    @newests = Newest.order(created_at: :desc).all
   end
 
   # GET /newests/1
@@ -79,11 +79,11 @@ class NewestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def newest_params
-      params.fetch(:newest, {}).permit(:text, :link)
+      params.fetch(:newest, {}).permit(:text, :link, :image)
     end
 
         # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.fetch(:event, {}).permit(:title, :describtion, :link, :start_time, :end_time, :coin_id)
+      params.fetch(:event, {}).permit(:title, :describtion, :link, :start_time, :end_time, :coin_id, :category_id)
     end
 end
