@@ -99,7 +99,7 @@
         $(event.target).find('.form-check-label').click();
       });
 
-      $(".close").click(function(event) {
+      $("ul").on('click', '.close', function(event) {
         $(event.target).closest('li').remove();
       });
 
