@@ -16,52 +16,52 @@
 
   <%= fields_for :event, @newest.event do |event_form| %>
 
-  <div class="form-group">
-    <div class="col-sm-6">
+  <div class="form-row">
+    <div class="form-group col-sm-6">
       <div class='input-group date' id='datetimepicker_start'>
-          <%= event_form.text_field :start_time, :class => "form-control", :placeholder => "Start" %>
+          <%= event_form.text_field :start_time, :class => "form-control", :placeholder => "Начало" %>
           <span class="input-group-addon">
-              <span class="glyphicon glyphicon-calendar"></span>
+              <i class="fa fa-calendar-o"></i>
           </span>
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="form-group col-sm-6">
       <div class='input-group date' id='datetimepicker_end'>
-          <%= event_form.text_field :end_time, :class => "form-control", :placeholder => "End" %>
+          <%= event_form.text_field :end_time, :class => "form-control", :placeholder => "Завершение" %>
           <span class="input-group-addon">
-              <span class="glyphicon glyphicon-calendar"></span>
+              <i class="fa fa-calendar-o"></i>
           </span>
       </div>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="col-sm-12">
-      <%= event_form.collection_select(:category_id, Category.all, :id, :name, {:prompt => "Category"}, {:class=>'form-control'}) %>
+  <div class="form-row">
+    <div class="form-group col">
+      <%= event_form.collection_select(:category_id, Category.order(name: :asc).all, :id, :name, {:prompt => "Категория"}, {:class=>'form-control', :id=>"categories"}) %>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="col-sm-12">
-      <%= event_form.collection_select(:coin_id, Coin.all, :id, :full_name, {:prompt => "Coin"}, {:class=>'form-control'})  %>
+  <div class="form-row">
+    <div class="form-group col">
+      <%= event_form.collection_select(:coin_id, Coin.order(sort_order: :asc).all, :id, :full_name, {:prompt => "Монета"}, {:class=>'form-control', :id=>"coins"}) %>
     </div>
   </div>
 
 
-  <div class="form-group">
-    <div class="col-sm-12">
-      <%= form.text_area :text, :class => "form-control", :placeholder => "Comment", :rows => "4" %>
+  <div class="form-row">
+    <div class="form-group col">
+      <%= form.text_area :text, :class => "form-control", :placeholder => "Комментарий", :rows => "4" %>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="col-sm-12">
-      <%= form.text_field :link, :class => "form-control", :placeholder => "Link", :type => "url" %>
+  <div class="form-row">
+    <div class="form-group col">
+      <%= form.text_field :link, :class => "form-control", :placeholder => "Ссылка на источник", :type => "url" %>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="col-sm-12">
+  <div class="form-row">
+    <div class="form-group col">
       <%= image_tag(@newest.image_url) if @newest.image? %>
       <%= form.file_field :image %>
       <%= form.hidden_field :image_cache %>
@@ -70,30 +70,62 @@
 
   <% end %>
 
-  <div class="form-group">
-    <div class="col-sm-12">
-      <%= form.submit "Create", :class => "btn btn-default" %>
+  <div class="form-row">
+    <div class="form-group col mb-0">
+      <%= form.submit "Создать", :class => "btn btn-outline-primary float-right" %>
     </div>
   </div>
 
   <script type="text/javascript">
-      $(function () {
-          $('#datetimepicker_start').datetimepicker({
-              locale: 'ru',
-              format: 'YYYY-MM-DD HH:mm'
-          });
-          $('#datetimepicker_end').datetimepicker({
-              useCurrent: false, //Important! See issue #1075
-              locale: 'ru',
-              format: 'YYYY-MM-DD HH:mm'
-          });
-          $("#datetimepicker_start").on("dp.change", function (e) {
-              $('#datetimepicker_end').data("DateTimePicker").minDate(e.date);
-          });
-          $("#datetimepicker_end").on("dp.change", function (e) {
-              $('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
-          });
+    $(function () {
+
+      function formatCoin (coin) {
+        if (!$(coin.element).data('coin-logo')) {
+          return coin.text;
+        }
+        var $state = $(
+          '<span><img src="' + $(coin.element).data('coin-logo') + '" class="img-flag" width=16 height = 16/> ' + coin.text + '</span>'
+        );
+        return $state;
+      };
+
+      $( "#categories, #coins" ).select2({
+          theme: "bootstrap",
+          language: "zh-TW"
       });
+
+      // datetime picker
+      $('#datetimepicker_start').datepicker({
+        format: {
+          toDisplay: function (date, format, language) {
+              return moment(date).format("DD.MM.YYYY");
+          },
+          toValue: function (date, format, language) {
+              return moment(date, "DD.MM.YYYY").format();
+          }
+        }
+      });
+
+      $('#datetimepicker_end').datepicker({
+        format: {
+          toDisplay: function (date, format, language) {
+              return moment(date).format("DD.MM.YYYY");
+          },
+          toValue: function (date, format, language) {
+              return moment(date, "DD.MM.YYYY").format();
+          }
+        }
+      });
+
+      $("#datetimepicker_start").on("changeDate", function (e) {
+        $('#datetimepicker_end').datepicker('setStartDate', e.date);
+      });
+
+      $("#datetimepicker_end").on("changeDate", function (e) {
+        $('#datetimepicker_start').datepicker('setEndDate', e.date);
+      });
+
+    });
   </script>
 
 <% end %>

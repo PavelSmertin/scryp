@@ -4,7 +4,23 @@ class NewestsController < ApplicationController
   # GET /newests
   # GET /newests.json
   def index
-    @newests = Newest.order(created_at: :desc).all
+    hash_params = params.fetch(:newests, {}).permit(:start_time, :end_time, category_ids: [], coin_ids: []).to_h
+
+    @start_time = hash_params[:start_time]
+    @end_time = hash_params[:end_time]
+    @my_categories = hash_params[:category_ids]
+    coin_ids = hash_params[:coin_ids].map(&:to_i).split(",") unless hash_params[:coin_ids].nil?
+    @my_coins = Coin.where(id: coin_ids)
+
+    @newests = Newest.joins(event: [:coin, :category])
+                      .select('newests.id as id, newests.image as image, newests.created_at as created_at, newests.text as text, newests.link as link, events.start_time as start_time, events.end_time as end_time, categories.name as name, coins.id as coin_id, coins.logo as logo, coins.full_name as full_name')
+                      .order('newests.created_at DESC')
+
+    @newests = @newests.where("end_time >= ? OR (end_time IS NULL AND start_time >= ?)", @start_time, @start_time) unless @start_time.blank?
+    @newests = @newests.where("start_time <= ?", @end_time) unless @end_time.blank?
+    @newests = @newests.where(events: {category_id: @my_categories.map(&:to_i).split(",")}) unless @my_categories.nil?
+    @newests = @newests.where(events: {coin_id: coin_ids}) unless coin_ids.nil?
+
   end
 
   # GET /newests/1

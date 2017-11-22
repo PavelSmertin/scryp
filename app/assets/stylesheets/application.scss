@@ -12,18 +12,34 @@
  *
  *= require_tree .
  *= require_self
+ *= require jquery-ui/core 
+ *= require jquery-ui/autocomplete
  */
 
-@import "bootstrap-sprockets";
 @import "bootstrap";
-@import "bootstrap-datetimepicker";
+@import "bootstrap-datepicker3";
+@import "font-awesome";
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,300,600');
+@import "select2";
+@import "select2-bootstrap";
 
+
+html {
+  position: relative;
+  min-height: 100%;
+}
 
 body {
-	background-color: #eff5f7;
-	font-family: Helvetica;
+	background-color: #f5f8fa;
+	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
-	color: #000000;
+	margin-bottom: 60px;
+  font-weight: 300;
+  letter-spacing: 0;
+
+  .form-control {
+    font-size: 14px;
+  }
 }
 
 ol, ul {
@@ -32,7 +48,11 @@ ol, ul {
     padding: 0;
 }
 
-a{
-	text-decoration: none;
-	color: #3663f3
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #f5f5f5;
 }
+

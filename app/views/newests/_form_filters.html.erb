@@ -1,63 +1,171 @@
+<%= form_tag('/newests', :method => "get", :html => {:class => "form-horizontal"}) do |form| %>
+  <div class="card mb-3">
+    <ul class="list-group list-group-flush">
 
-<%= form_for("/newests", :method => "get", :html => {:class => "form-horizontal"}) do |form| %>
+      <li class="list-group-item">
+        <h6 class="card-title">
+          Период
+        </h6>
+        <div class="form-row">
+          <div class="form-group col-sm-6">
+            <div class='input-group date' id='datetimepicker_start'>
+                <%= text_field_tag 'newests[start_time]', @start_time, :class => "form-control", :placeholder => "Начало" %>
+                <span class="input-group-addon">
+                    <i class="fa fa-calendar-o"></i>
+                </span>
+            </div>
+          </div>
+          <div class="form-group col-sm-6">
+            <div class='input-group date' id='datetimepicker_end'>
+                <%= text_field_tag 'newests[end_time]', @end_time, :class => "form-control", :placeholder => "Завершение" %>
+                <span class="input-group-addon">
+                    <i class="fa fa-calendar-o"></i>
+                </span>
+            </div>
+          </div>
+        </div>
+      </li>
 
-  <div class="form-group">
-    <div class="col-sm-6">
-      <div class='input-group date' id='datetimepicker_start'>
-          <%= form.text_field :start_time, :class => "form-control", :placeholder => "Start" %>
-          <span class="input-group-addon">
-              <span class="glyphicon glyphicon-calendar"></span>
-          </span>
-      </div>
-    </div>
-    <div class="col-sm-6">
-      <div class='input-group date' id='datetimepicker_end'>
-          <%= form.text_field :end_time, :class => "form-control", :placeholder => "End" %>
-          <span class="input-group-addon">
-              <span class="glyphicon glyphicon-calendar"></span>
-          </span>
-      </div>
-    </div>
+      <li class="list-group-item">
+        <h6 class="card-title">
+          Мои категории
+        </h6>
+        <div class="form-row">
+          <div class="form-group col">
+            <ul class="list-group categories_list">
+              <% Category.order(name: :asc).all.each do |category| %>
+                <li class="list-group-item list-group-item-action border-0">
+                   <label class="form-check-label">
+                      <%= check_box_tag "newests[category_ids][]", category.id, !@my_categories.nil? && @my_categories.include?(category.id.to_s), class: 'form-check-input' %>
+                      <%= category.name %>
+                   </label>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item">
+        <h6 class="card-title">
+          Мои монеты
+        </h6>
+        <div class="form-row">
+          <div class="form-group col">
+            <%= text_field_tag 'js[coin_search]', nil, :class => "form-control", :id => "coin_search", :placeholder => "Начните вводить" %>
+            <div id="coin_terms">
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row coins_filter">
+          <div class="form-group col">
+            <ul id="coins_list" class="list-group list-group-flush">
+              <% @my_coins.each do |coin| %>
+                <li class="list-group-item border-0">
+                  <img src ="<%= coin.logo_url %>" width=16 height=16 class='float_coin_logo'/>
+                  <%= coin.full_name %>
+                  <input type='hidden' name="newests[coin_ids][]" value="<%= coin.id %>">
+                  <button type='button' class='close' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                  </button>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="form-row">
+          <div class="form-group col mb-0">
+            <%= submit_tag "Filter", :class => "btn btn-outline-primary float-right" %>
+          </div>
+        </div>
+      </li>
+    </ul>
+
   </div>
-
-  <div class="form-group">
-    <div class="col-sm-12">
-      <%= form.collection_select(:category_id, Category.all, :id, :name, {:prompt => "Category"}, {:class=>'form-control'}) %>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-sm-12">
-      <%= form.collection_select(:coin_id, Coin.all, :id, :full_name, {:prompt => "Coin"}, {:class=>'form-control'})  %>
-    </div>
-  </div>
-
-
-  <div class="form-group">
-    <div class="col-sm-12">
-      <%= form.submit "Filter", :class => "btn btn-default" %>
-    </div>
-  </div>
-
-  <script type="text/javascript">
-      $(function () {
-          $('#datetimepicker_start').datetimepicker({
-              locale: 'ru',
-              format: 'YYYY-MM-DD HH:mm'
-          });
-          $('#datetimepicker_end').datetimepicker({
-              useCurrent: false, //Important! See issue #1075
-              locale: 'ru',
-              format: 'YYYY-MM-DD HH:mm'
-          });
-          $("#datetimepicker_start").on("dp.change", function (e) {
-              $('#datetimepicker_end').data("DateTimePicker").minDate(e.date);
-          });
-          $("#datetimepicker_end").on("dp.change", function (e) {
-              $('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
-          });
-      });
-  </script>
 
 <% end %>
+
+
+
+
+<script type="text/javascript">
+  $(function () {
+
+      $(".categories_list > .list-group-item-action").click(function(event) {
+        $(event.target).find('.form-check-label').click();
+      });
+
+      $(".close").click(function(event) {
+        $(event.target).closest('li').remove();
+      });
+
+      // coins autocompleter
+      $( "#coin_search" ).autocomplete({
+        minLength: 0,
+        source: "<%= autocomplete_coin_full_name_coins_path %>",
+
+        appendTo: "#coin_terms",
+
+        focus: function( event, ui ) {
+          $( "#coin_search" ).val( ui.item.label );
+          return false;
+        },
+        select: function( event, ui ) {
+          $("#coin_search").val("");
+          $("#coins_list")
+            .append($( "<li class='list-group-item border-0'></li>" )
+              .append($("<img src =" + ui.item.logo.url + " width=16 height=16 class='float_coin_logo'/>"))
+              .append(ui.item.value)
+              .append($("<input type='hidden' name = 'newests[coin_ids][]' value='" + ui.item.id + "'>"))
+              .append($("<button type='button' class='close' aria-label='Close'><span aria-hidden='true'>&times;</span></button>"))
+            );
+
+          return false;
+        }
+      }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li class='list-group-item list-group-item-action'></li>" )
+            .data( "ui-autocomplete-item", item )
+            .append( "<img src =" + item.logo.url + " width=16 height=16 class='float_coin_logo'/><span>" + item.value + "</span>" )
+            .appendTo( ul );
+      };
+
+
+      // datetime picker
+      $('#datetimepicker_start').datepicker({
+        format: {
+          toDisplay: function (date, format, language) {
+              return moment(date).format("DD.MM.YYYY");
+          },
+          toValue: function (date, format, language) {
+              return moment(date, "DD.MM.YYYY").format();
+          }
+        }
+      });
+
+      $('#datetimepicker_end').datepicker({
+        format: {
+          toDisplay: function (date, format, language) {
+              return moment(date).format("DD.MM.YYYY");
+          },
+          toValue: function (date, format, language) {
+              return moment(date, "DD.MM.YYYY").format();
+          }
+        }
+      });
+
+      $("#datetimepicker_start").on("changeDate", function (e) {
+        $('#datetimepicker_end').datepicker('setStartDate', e.date);
+      });
+
+      $("#datetimepicker_end").on("changeDate", function (e) {
+        $('#datetimepicker_start').datepicker('setEndDate', e.date);
+      });
+
+  });
+</script>
+
 

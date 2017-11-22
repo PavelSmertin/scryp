@@ -14,8 +14,18 @@
 //= require turbolinks
 //= require_tree .
 
-//= require jquery
+//= require jquery3
+//= require popper
 //= require bootstrap-sprockets
+
 //= require moment
 //= require moment/ru
-//= require bootstrap-datetimepicker
+//= require bootstrap-datepicker/core
+//= require bootstrap-datepicker/locales/bootstrap-datepicker.es.js
+//= require bootstrap-datepicker/locales/bootstrap-datepicker.fr.js
+
+//= require jquery_ujs
+//= require jquery-ui/widgets/autocomplete
+//= require autocomplete-rails
+
+//= require select2
