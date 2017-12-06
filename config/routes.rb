@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  post 'user_token' => 'user_token#create'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   resources :newests
@@ -9,5 +8,10 @@ Rails.application.routes.draw do
   end
 
   resources :categories
+
+  post 'user_token' => 'user_token#create'
+  get '/users/current-user', to: "current_user#show"
+  resources :users
+  mount Knock::Engine => "/knock"
   
 end
