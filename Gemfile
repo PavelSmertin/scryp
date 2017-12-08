@@ -46,7 +46,7 @@ gem "font-awesome-rails"
 gem 'rails-jquery-autocomplete'
 gem 'select2-rails'
 
-
+gem 'rack-cors'
 gem 'knock'
 
 group :development, :test do
