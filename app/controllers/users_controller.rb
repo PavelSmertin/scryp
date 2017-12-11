@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   
   include ErrorSerializer
-  skip_before_action :authenticate, only: [:create]
+  skip_before_action :authenticate_user, only: [:create]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   def index
