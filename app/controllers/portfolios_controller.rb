@@ -1,11 +1,13 @@
 class PortfoliosController < ApplicationController
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
-  skip_before_action :authenticate
+  #skip_before_action :authenticate
+  skip_before_action :verify_authenticity_token, only: [:create, :update, :destroy]
+
 
   # GET /portfolios
   # GET /portfolios.json
   def index
-    @portfolios = Portfolio.all
+    @portfolios = Portfolio.order("profit_24h DESC").all
   end
 
   # GET /portfolios/1
@@ -25,22 +27,44 @@ class PortfoliosController < ApplicationController
   # POST /portfolios
   # POST /portfolios.json
   def create
-    @portfolio = Portfolio.new(portfolio_params)
 
-    respond_to do |format|
-      if @portfolio.save
-        format.html { redirect_to @portfolio, notice: 'Portfolio was successfully created.' }
-        format.json { render :show, status: :created, location: @portfolio }
-      else
-        format.html { render :new }
-        format.json { render json: @portfolio.errors, status: :unprocessable_entity }
-      end
-    end
+    #current_portfolio = Portfolio.where(["user_id = ?", current_user.id]).first
+
+    p "current_user"
+    p "current_portfolio"
+
+    # if(current_portfolio.nil?)
+    #   @portfolio = Portfolio.new(portfolio_params)
+    #   @portfolio.user_id = current_user.id
+    #   respond_to do |format|
+    #     if @portfolio.save
+    #       format.html { redirect_to @portfolio, notice: 'Portfolio was successfully created.' }
+    #       format.json { render :show, status: :created, location: @portfolio }
+    #     else
+    #       format.html { render :new }
+    #       format.json { render json: @portfolio.errors, status: :unprocessable_entity }
+    #     end
+    #   end
+    # else
+    #   set_portfolio(current_portfolio.id)
+    #   respond_to do |format|
+    #     if @portfolio.update(portfolio_params)
+    #       format.html { redirect_to @portfolio, notice: 'Portfolio was successfully updated.' }
+    #       format.json { render :show, status: :ok, location: @portfolio }
+    #     else
+    #       format.html { render :edit }
+    #       format.json { render json: @portfolio.errors, status: :unprocessable_entity }
+    #     end
+    #   end
+    # end
+
+
   end
 
   # PATCH/PUT /portfolios/1
   # PATCH/PUT /portfolios/1.json
   def update
+
     respond_to do |format|
       if @portfolio.update(portfolio_params)
         format.html { redirect_to @portfolio, notice: 'Portfolio was successfully updated.' }
