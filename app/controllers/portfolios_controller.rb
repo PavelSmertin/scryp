@@ -1,6 +1,6 @@
 class PortfoliosController < ApplicationController
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
-  #skip_before_action :authenticate
+  skip_before_action :authenticate, only: [:index]
   skip_before_action :verify_authenticity_token, only: [:create, :update, :destroy]
 
 
