@@ -1,5 +1,6 @@
 class PortfoliosController < ApplicationController
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token
 
   # GET /portfolios
   # GET /portfolios.json
@@ -69,6 +70,6 @@ class PortfoliosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def portfolio_params
-      params.fetch(:portfolio, {})
+      params.fetch(:portfolio, {}).permit(:user_name, :coins_count, :profit_24h, :profit_7d)
     end
 end
