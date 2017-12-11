@@ -1,0 +1,1 @@
+json.extract! portfolio, :user_name, :coins_count, :profit_24h, :profit_7d

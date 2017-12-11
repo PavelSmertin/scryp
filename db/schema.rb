@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171206100027) do
+ActiveRecord::Schema.define(version: 20171211024228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,17 @@ ActiveRecord::Schema.define(version: 20171206100027) do
     t.index ["event_id"], name: "index_newests_on_event_id"
   end
 
+  create_table "portfolios", force: :cascade do |t|
+    t.string "user_name"
+    t.integer "coins_count"
+    t.decimal "profit_24h"
+    t.decimal "profit_7d"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_portfolios_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -72,4 +83,5 @@ ActiveRecord::Schema.define(version: 20171206100027) do
   add_foreign_key "events", "categories"
   add_foreign_key "events", "coins"
   add_foreign_key "newests", "events"
+  add_foreign_key "portfolios", "users"
 end

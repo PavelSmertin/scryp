@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_name: MyString
+  coins_count: 1
+  profit_24h: 9.99
+  profit_7d: 9.99
+
+two:
+  user_name: MyString
+  coins_count: 1
+  profit_24h: 9.99
+  profit_7d: 9.99
