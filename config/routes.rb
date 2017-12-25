@@ -14,5 +14,9 @@ Rails.application.routes.draw do
   resources :users
   resources :portfolios
   mount Knock::Engine => "/knock"
-  
+
+
+  get '/sync', to: "users#data"
+  post '/sync', to: "users#data_update"
+
 end
