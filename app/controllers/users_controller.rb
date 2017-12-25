@@ -31,7 +31,7 @@ class UsersController < ApplicationController
   end
 
   def data
-    render plain: current_user.data.to_json, status: 200
+    render plain: current_user.data, status: 200
   end
 
 
