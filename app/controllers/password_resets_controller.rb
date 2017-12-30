@@ -8,7 +8,6 @@ class PasswordResetsController < ApplicationController
     @user = User.find_by(email: params[:password_reset][:email].downcase)
     if @user
       @user.create_reset_digest
-      @user.send_password_reset_email
       render json: {success: true, user_id: @user.id}, status: 200
     else
       render json: {success: false, messsage: "email not found"}, status: 404
