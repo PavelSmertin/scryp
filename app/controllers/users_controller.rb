@@ -15,7 +15,8 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     if user.save
-      render json: {}, status: 200
+      user.activate
+      render json: {success: true, jwt: Knock::AuthToken.new(payload: {sub: user.id}).token}, status: 200
     else
       render json: ErrorSerializer.serialize(user.errors), status: 422
     end
