@@ -31,7 +31,7 @@ class PasswordResetsController < ApplicationController
     else 
       @user.update_attribute(:password, user_params[:password])
       @user.update_attribute(:reset_digest, nil)
-      render json: {success: true, jwt: Knock::AuthToken.new(payload: {sub: @user.id}).token }, status: 422
+      render json: {success: true, jwt: Knock::AuthToken.new(payload: {sub: @user.id}).token }, status: 200
 
     end
   end
