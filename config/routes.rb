@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :password_resets,     only: [:create, :update]
 
+  get '/public_portfolio/:user_id', to: "users#public_portfolio"
   get '/sync', to: "users#data"
   post '/sync', to: "users#data_update"
 

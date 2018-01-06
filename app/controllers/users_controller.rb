@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   
   include ErrorSerializer
-  skip_before_action :authenticate_user, only: [:create]
+  skip_before_action :authenticate_user, only: [:create, :public_portfolio]
   skip_before_action :verify_authenticity_token, only: [:create, :data_update]
 
   def index
@@ -35,6 +35,9 @@ class UsersController < ApplicationController
     render plain: current_user.data, status: 200
   end
 
+  def public_portfolio
+    render json: User.find(params[:user_id]).data, status: 200
+  end
 
   private
 
