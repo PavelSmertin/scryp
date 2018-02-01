@@ -53,12 +53,10 @@ class UsersController < ApplicationController
       end
 
       portfolio = Portfolio.where(user_id: current_user.id, portfolio_id: h_portfolio["_id"]).first_or_initialize
-      portfolio.update(new_porfolio)
+      portfolio.update!(new_porfolio)
     end
 
     h["portfolio_coins"].each do |h_portfolio_coin| 
-
-      client_portfolio_id = h_portfolio_coin["portfolio_id"]
 
       new_portfolio_coin = {}
       new_portfolio_coin["user_id"]         = current_user.id
@@ -74,8 +72,11 @@ class UsersController < ApplicationController
       new_portfolio_coin["updated_at"]      = updated_at
 
 
-      portfolio_coin = PortfolioCoin.where(user_id: current_user.id, portfolio_id: client_portfolio_id).first_or_initialize
-      portfolio_coin.update(new_portfolio_coin)
+      portfolio_coin = PortfolioCoin.where(user_id: current_user.id, portfolio_id: h_portfolio_coin["portfolio_id"]).first_or_initialize
+
+      p new_portfolio_coin
+
+      portfolio_coin.update!(new_portfolio_coin)
 
     end
 

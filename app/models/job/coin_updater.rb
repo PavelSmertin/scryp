@@ -43,6 +43,7 @@ class Job::CoinUpdater
 
           current_coin.remote_logo_url        = "#{CRYPTOCOMPARE_MEDIA}#{coin['ImageUrl']}"
 
+          current_coin.id                     = coin['Id']
           current_coin.symbol                 = coin['Symbol']
           current_coin.coin_name              = coin['CoinName']
           current_coin.full_name              = coin['FullName']
