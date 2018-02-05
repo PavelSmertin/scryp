@@ -102,8 +102,8 @@ class UsersController < ApplicationController
   end
 
   def public_portfolio
-    render json: User.find(params[:user_id]).data, status: 200
-    # render json: PortfolioCoin.where(user_id: params[:user_id], portfolio_id: params[:portfolio_id]), status: 200
+    #render json: User.find(params[:user_id]).data, status: 200
+    render json: PortfolioCoin.where(user_id: params[:user_id], portfolio_id: params[:portfolio_id]), status: 200
 
   end
 
