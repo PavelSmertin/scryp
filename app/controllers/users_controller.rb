@@ -86,8 +86,7 @@ class UsersController < ApplicationController
     #   calculator.calculate_portfolio(current_user.id, portfolio)
     # }
 
-    calculator = Job::PortfolioCalculator.new
-    calculator.calculate_all
+    Job.run
 
     if current_user.save
       render json: {success: true, updated_at: updated_at}, status: 200
