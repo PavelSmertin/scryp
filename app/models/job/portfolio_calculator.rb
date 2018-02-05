@@ -21,9 +21,9 @@ class Job::PortfolioCalculator
     value_7d = 0;
 
     portfolio_coins.each { |portfolio_coin| 
-      value_24h += portfolio_coin.original * portfolio_coin.price_24h;
-      value_7d += portfolio_coin.original * portfolio_coin.price_7d;
-      value_holdings += portfolio_coin.original * portfolio_coin.price_now;
+      value_24h += portfolio_coin.original * portfolio_coin.price_24h if !portfolio_coin.price_24h.nil?
+      value_7d += portfolio_coin.original * portfolio_coin.price_7d if !portfolio_coin.price_7d.nil?
+      value_holdings += portfolio_coin.original * portfolio_coin.price_now if !portfolio_coin.price_now.nil?
     }
 
     portfolio.coins_count = portfolio_coins.size

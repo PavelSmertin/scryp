@@ -81,10 +81,13 @@ class UsersController < ApplicationController
 
     end
 
-    portfolios_for_update.each { |portfolio|
-      calculator = Job::PortfolioCalculator.new
-      calculator.calculate_portfolio(current_user.id, portfolio)
-    }
+    # portfolios_for_update.each { |portfolio|
+    #   calculator = Job::PortfolioCalculator.new
+    #   calculator.calculate_portfolio(current_user.id, portfolio)
+    # }
+
+    calculator = Job::PortfolioCalculator.new
+    calculator.calculate_all
 
     if current_user.save
       render json: {success: true, updated_at: updated_at}, status: 200
