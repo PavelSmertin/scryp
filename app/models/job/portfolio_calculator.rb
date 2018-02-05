@@ -31,8 +31,15 @@ class Job::PortfolioCalculator
     profit_24h = value_holdings - value_24h;
     profit_7d  = value_holdings - value_7d;
 
-    portfolio.profit_24h  = profit_24h
-    portfolio.profit_7d   = profit_7d
+    profit_24h_percent = 0;
+    profit_7d_percent = 0;
+    if value_holdings > 0) 
+      profit_24h_percent = profit_24h * 100 / value_holdings;
+      profit_7d_percent = profit_7d * 100 / value_holdings;
+    end
+
+    portfolio.profit_24h  = profit_24h_percent
+    portfolio.profit_7d   = profit_7d_percent
 
     portfolio.save
 
