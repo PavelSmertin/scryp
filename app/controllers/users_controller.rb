@@ -29,6 +29,8 @@ class UsersController < ApplicationController
     # Json положить в таблицы
     h = JSON.parse sync_params[:data]
 
+    portfolios_for_update = []
+
     h["portfolios"].each do |h_portfolio| 
 
       created_at = DateTime.strptime(CGI::unescape(h_portfolio["created_at"]), '%Y-%m-%d %H:%M:%S')
@@ -39,12 +41,7 @@ class UsersController < ApplicationController
       new_porfolio["base_coin_id"]    = h_portfolio["base_coin_id"]
       new_porfolio["balance"]         = h_portfolio["balance"]
       new_porfolio["original"]        = h_portfolio["original"]
-      new_porfolio["price_now"]       = h_portfolio["price_now"]
       new_porfolio["price_original"]  = h_portfolio["price_original"]
-      new_porfolio["price_24h"]       = h_portfolio["price_24h"]
-      new_porfolio["coins_count"]     = h_portfolio["coins_count"]
-      new_porfolio["profit_24h"]      = h_portfolio["profit_24h"]
-      new_porfolio["profit_7d"]       = h_portfolio["profit_7d"]
       new_porfolio["created_at"]      = created_at
       new_porfolio["updated_at"]      = updated_at
 
@@ -58,6 +55,7 @@ class UsersController < ApplicationController
 
       portfolio = Portfolio.where(user_id: current_user.id, portfolio_id: h_portfolio["_id"]).first_or_initialize
       portfolio.update!(new_porfolio)
+      portfolios_for_update << portfolio
     end
 
     h["portfolio_coins"].each do |h_portfolio_coin| 
@@ -69,12 +67,11 @@ class UsersController < ApplicationController
       new_portfolio_coin["user_id"]         = current_user.id
       new_portfolio_coin["portfolio_id"]    = h_portfolio_coin["portfolio_id"]
       new_portfolio_coin["coin_id"]         = h_portfolio_coin["coin_id"]
+      new_portfolio_coin["symbol"]          = h_portfolio_coin["symbol"]
+      new_portfolio_coin["exchange"]        = h_portfolio_coin["name"]
       new_portfolio_coin["exchange_id"]     = h_portfolio_coin["exchange_id"]
       new_portfolio_coin["original"]        = h_portfolio_coin["original"]
-      new_portfolio_coin["price_now"]       = h_portfolio_coin["price_now"]
       new_portfolio_coin["price_original"]  = h_portfolio_coin["price_original"]
-      new_portfolio_coin["price_24h"]       = h_portfolio_coin["price_24h"]
-      new_portfolio_coin["price_7d"]        = h_portfolio_coin["price_7d"]
       new_portfolio_coin["created_at"]      = created_at
       new_portfolio_coin["updated_at"]      = updated_at
 
@@ -83,6 +80,11 @@ class UsersController < ApplicationController
       portfolio_coin.update!(new_portfolio_coin)
 
     end
+
+    portfolios_for_update.each { |portfolio|
+      calculator = Job::PortfolioCalculator.new
+      calculator.calculate_portfolio(current_user.id, portfolio)
+    }
 
     if current_user.save
       render json: {success: true, updated_at: updated_at}, status: 200
@@ -99,6 +101,8 @@ class UsersController < ApplicationController
 
   def public_portfolio
     render json: User.find(params[:user_id]).data, status: 200
+    # render json: PortfolioCoin.where(user_id: params[:user_id], portfolio_id: params[:portfolio_id]), status: 200
+
   end
 
   private
