@@ -52,8 +52,8 @@ class Job::PriceUpdater
   private
   def get_response(request)
 
-    request = URI(request)
-    response  = Net::HTTP.get_response(request)
+    uri = URI(request)
+    response  = Net::HTTP.get_response(uri)
 
     @logger.info 'API request: ' + request
 
