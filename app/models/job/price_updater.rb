@@ -56,8 +56,8 @@ class Job::PriceUpdater
   def get_response(request)
       response  = Net::HTTP.get_response(request)
 
-      @logger.info 'API request: ' + request
-      @logger.info 'API response: ' + response
+      @logger.info 'API request: ' + request.to_s
+      @logger.info 'API response: ' + response.to_s
 
       if response.code == "301"
         response = Net::HTTP.get_response(URI.parse(response.header['location']))
