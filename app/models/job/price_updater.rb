@@ -12,7 +12,7 @@ class Job::PriceUpdater
   def update
 
     coins = PortfolioCoin.distinct.pluck(:symbol)
-    symbols = coins.join(', ')
+    symbols = coins.join(',')
 
     time_24h  = 24.hours.ago.to_time.to_i
     time_7d   = 7.days.ago.to_time.to_i
@@ -56,6 +56,7 @@ class Job::PriceUpdater
     response  = Net::HTTP.get_response(uri)
 
     @logger.info 'API request: ' + request
+    @logger.info 'API request: ' + response
 
     if response.code == "301"
       response = Net::HTTP.get_response(URI.parse(response.header['location']))
