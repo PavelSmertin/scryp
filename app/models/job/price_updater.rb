@@ -16,15 +16,12 @@ class Job::PriceUpdater
 
     time_24h  = 24.hours.ago.to_time.to_i
     time_7d   = 7.days.ago.to_time.to_i
-    request_now = URI("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}")
-    request_24h = URI("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}&ts=#{time_24h}")
-    request_7d  = URI("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}&ts=#{time_7d}")
 
     begin
 
-      response_now  = get_response(request_now)
-      response_24h  = get_response(request_24h)
-      response_7d   = get_response(request_7d)
+      response_now  = get_response("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}")
+      response_24h  = get_response("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}&ts=#{time_24h}")
+      response_7d   = get_response("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}&ts=#{time_7d}")
 
       # {"USDT":{"BTC":0.0001114}}
 
@@ -54,26 +51,27 @@ class Job::PriceUpdater
 
   private
   def get_response(request)
-      response  = Net::HTTP.get_response(request)
 
-      @logger.info 'API request: ' + request.to_s
-      @logger.info 'API response: ' + response.to_s
+    request = URI(request)
+    response  = Net::HTTP.get_response(request)
 
-      if response.code == "301"
-        response = Net::HTTP.get_response(URI.parse(response.header['location']))
-      end
+    @logger.info 'API request: ' + request
 
-      if response.code != "200"
-        raise 'Error in CRYPTOCOMPARE API response. code: {response.code}'
-      end
+    if response.code == "301"
+      response = Net::HTTP.get_response(URI.parse(response.header['location']))
+    end
 
-      response_parsed = JSON.parse(response.body)
+    if response.code != "200"
+      raise 'Error in CRYPTOCOMPARE API response. code: {response.code}'
+    end
 
-      if response_parsed['Response'] == 'Error'
-        raise response_parsed['Message']
-      end
+    response_parsed = JSON.parse(response.body)
 
-      return response_parsed
+    if response_parsed['Response'] == 'Error'
+      raise response_parsed['Message']
+    end
+
+    return response_parsed
 
   end
 
