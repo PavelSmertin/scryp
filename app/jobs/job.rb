@@ -4,7 +4,7 @@ class Job
     	@logger.info "DATE #{time.to_date}"
 
 		@logger.info "JOBS: price_updater"
-		price_updater = Job::PriceUpdater.new
+		price_updater = Job::PriceUpdater.new(@logger)
 		price_updater.update
 
 		@logger.info "JOBS: portfolio_calculator"

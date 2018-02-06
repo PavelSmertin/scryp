@@ -5,6 +5,10 @@ class Job::PriceUpdater
 
   CRYPTOCOMPARE_API_URI = 'https://min-api.cryptocompare.com/data/pricehistorical'
 
+  def initialize(logger)
+    @logger = logger
+  end
+
   def update
 
     coins = PortfolioCoin.distinct.pluck(:symbol)
@@ -51,6 +55,9 @@ class Job::PriceUpdater
   private
   def get_response(request)
       response  = Net::HTTP.get_response(request)
+
+      @logger.info 'API request: ' + request
+      @logger.info 'API response: ' + response
 
       if response.code == "301"
         response = Net::HTTP.get_response(URI.parse(response.header['location']))
