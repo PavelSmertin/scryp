@@ -1,5 +1,7 @@
 class User < ApplicationRecord
 
+  mount_uploader :avatar, AvatarUploader
+
   has_one :portfolio
 
   has_secure_password
