@@ -9,7 +9,11 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: current_user
+    render json: {
+      :avatar => current_user.avatar.url, 
+      :first_name => current_user.first_name,
+      :last_name => current_user.last_name
+    }
   end
 
   def create
