@@ -2,7 +2,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
-  #include CarrierWave::MiniMagick
+  include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader:
   storage :file
@@ -22,11 +22,11 @@ class AvatarUploader < CarrierWave::Uploader::Base
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
-  # process resize_to_fit: [240, 240]
+  process resize_to_fit: [240, 240]
 
-  # version :small do
-  #   process resize_to_fill: [96, 96]
-  # end
+  version :small do
+    process resize_to_fill: [96, 96]
+  end
 
   # process convert: 'png'
 
@@ -37,14 +37,14 @@ class AvatarUploader < CarrierWave::Uploader::Base
   #   %w(jpg jpeg gif png)
   # end
 
-  # def filename
-  #    "#{secure_token(10)}.png" if original_filename.present?
-  # end
+  def filename
+     "#{secure_token(10)}.png" if original_filename.present?
+  end
 
-  # protected
-  # def secure_token(length=16)
-  #   var = :"@#{mounted_as}_secure_token"
-  #   model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.hex(length/2))
-  # end
+  protected
+  def secure_token(length=16)
+    var = :"@#{mounted_as}_secure_token"
+    model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.hex(length/2))
+  end
 
 end

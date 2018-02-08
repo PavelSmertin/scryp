@@ -25,9 +25,6 @@ class UsersController < ApplicationController
   def update
     user = User.find(current_user.id)
 
-    # uploader = AvatarUploader.new
-    # uploader.store!(params[:file])
-
     if user.update(update_params)
       render json: {success: true, message: 'User was successfully updated.'}, status: 200
     else
