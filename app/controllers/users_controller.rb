@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: User.find(current_user.id)
+    render json: current_user
   end
 
   def create

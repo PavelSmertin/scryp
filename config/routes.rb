@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   post 'user_token' => 'user_token#create'
   get '/users/current-user', to: "current_user#show"
+  get '/user_info', to: "users#show"
   put '/users', to: "users#update"
   resources :users
   resources :portfolios
