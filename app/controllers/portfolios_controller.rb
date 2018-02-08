@@ -12,7 +12,7 @@ class PortfoliosController < ApplicationController
 
       public_portfolio_element = {}
 
-      public_portfolio_element["portfolio_id"]     = public_portfolio.id
+      public_portfolio_element["portfolio_id"]     = public_portfolio.portfolio_id
       public_portfolio_element["user_id"]          = public_portfolio.user.id
       public_portfolio_element["avatar"]           = public_portfolio.user.avatar.small.url
       public_portfolio_element["coins_count"]      = public_portfolio.coins_count
