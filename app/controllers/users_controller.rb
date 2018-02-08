@@ -23,7 +23,8 @@ class UsersController < ApplicationController
   end
 
   def update
-    if current_user.update(update_params)
+    user = User.find(current_user.id)
+    if user.update(update_params)
       render json: {success: true, message: 'User was successfully updated.'}, status: 200
     else
       render json: ErrorSerializer.serialize(user.errors), status: 422
