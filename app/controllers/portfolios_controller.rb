@@ -4,10 +4,30 @@ class PortfoliosController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create, :update, :destroy]
 
 
-  # GET /portfolios
-  # GET /portfolios.json
   def index
-    @portfolios = Portfolio.order("profit_24h DESC").all
+    public_portfolios = Portfolio.includes(:user).order("profit_24h DESC").all
+
+    public_portfolios_array = []
+    public_portfolios.each { |public_portfolio| 
+
+      public_portfolio_element = {}
+
+      public_portfolio_element["portfolio_id"]     = public_portfolio.id
+      public_portfolio_element["user_id"]          = public_portfolio.user.id
+      public_portfolio_element["avatar"]           = public_portfolio.user.avatar.small.url
+      public_portfolio_element["coins_count"]      = public_portfolio.coins_count
+      public_portfolio_element["profit_24h"]       = public_portfolio.profit_24h
+      public_portfolio_element["profit_7d"]        = public_portfolio.profit_7d
+
+      if public_portfolio.user.first_name.to_s.empty? && public_portfolio.user.last_name.to_s.empty?
+        public_portfolio_element["user_name"]      = "user#{public_portfolio.user.id}"
+      else
+        public_portfolio_element["user_name"]      = "#{public_portfolio.user.first_name} #{public_portfolio.user.last_name}"
+      end
+
+      public_portfolios_array << public_portfolio_element
+    }
+    render json: public_portfolios_array, status: 200
   end
 
   # GET /portfolios/1

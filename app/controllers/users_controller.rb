@@ -65,7 +65,7 @@ class UsersController < ApplicationController
       if(current_user.first_name.to_s.empty? && current_user.last_name.to_s.empty?)
         new_porfolio["user_name"] = "user#{current_user.id}"
       else
-        new_porfolio["user_name"] = "#{current_user.first_name} {current_user.last_name}"
+        new_porfolio["user_name"] = "#{current_user.first_name} #{current_user.last_name}"
       end
 
       portfolio = Portfolio.where(user_id: current_user.id, portfolio_id: h_portfolio["_id"]).first_or_initialize
