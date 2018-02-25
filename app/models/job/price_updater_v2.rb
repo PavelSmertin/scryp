@@ -11,7 +11,7 @@ class Job::PriceUpdaterV2
 
   def update
 
-    coins = PortfolioCoin.distinct.pluck(:symbol).limit(5)
+    coins = PortfolioCoin.distinct.limit(5).pluck(:symbol)
     symbols = coins.join(',')
 
     time_24h  = 24.hours.ago.to_time.to_i
