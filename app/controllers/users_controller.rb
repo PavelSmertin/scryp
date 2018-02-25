@@ -58,6 +58,7 @@ class UsersController < ApplicationController
       portfolio.balance         = h_portfolio["balance"]
       portfolio.original        = h_portfolio["original"]
       portfolio.price_original  = h_portfolio["price_original"]
+      portfolio.removed         = h_portfolio["removed"]
       portfolio.created_at      = created_at
       portfolio.updated_at      = updated_at
 
@@ -86,6 +87,9 @@ class UsersController < ApplicationController
       portfolio_coin.exchange_id       = h_portfolio_coin["exchange_id"]
       portfolio_coin.original          = h_portfolio_coin["original"]
       portfolio_coin.price_original    = h_portfolio_coin["price_original"]
+      portfolio_coin.change_24h        = h_portfolio_coin["change_24h"]
+      portfolio_coin.change_pct_24h    = h_portfolio_coin["change_pct_24h"]
+      portfolio_coin.removed           = h_portfolio_coin["removed"]
       portfolio_coin.created_at        = created_at
       portfolio_coin.updated_at        = updated_at
 
@@ -114,7 +118,7 @@ class UsersController < ApplicationController
 
   def public_portfolio
     #render json: User.find(params[:user_id]).data, status: 200
-    render json: PortfolioCoin.where(user_id: params[:user_id], portfolio_id: params[:portfolio_id]), status: 200
+    render json: PortfolioCoin.where(user_id: params[:user_id], portfolio_id: params[:portfolio_id], removed: false), status: 200
 
   end
 
