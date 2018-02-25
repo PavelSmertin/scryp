@@ -60,8 +60,6 @@ class UsersController < ApplicationController
       new_porfolio["created_at"]      = created_at
       new_porfolio["updated_at"]      = updated_at
 
-      p h_portfolio
-
       if(current_user.first_name.to_s.empty? && current_user.last_name.to_s.empty?)
         new_porfolio["user_name"] = "user#{current_user.id}"
       else
@@ -78,17 +76,17 @@ class UsersController < ApplicationController
       created_at = DateTime.strptime(CGI::unescape(h_portfolio_coin["created_at"]), '%Y-%m-%d %H:%M:%S')
 
       new_portfolio_coin = {}
-      new_portfolio_coin["id"]              = h_portfolio_coin["_id"]
-      new_portfolio_coin["user_id"]         = current_user.id
-      new_portfolio_coin["portfolio_id"]    = h_portfolio_coin["portfolio_id"]
-      new_portfolio_coin["coin_id"]         = h_portfolio_coin["coin_id"]
-      new_portfolio_coin["symbol"]          = h_portfolio_coin["symbol"]
-      new_portfolio_coin["exchange"]        = h_portfolio_coin["name"]
-      new_portfolio_coin["exchange_id"]     = h_portfolio_coin["exchange_id"]
-      new_portfolio_coin["original"]        = h_portfolio_coin["original"]
-      new_portfolio_coin["price_original"]  = h_portfolio_coin["price_original"]
-      new_portfolio_coin["created_at"]      = created_at
-      new_portfolio_coin["updated_at"]      = updated_at
+      new_portfolio_coin["user_id"]           = current_user.id
+      new_portfolio_coin["portfolio_id"]      = h_portfolio_coin["portfolio_id"]
+      new_portfolio_coin["portfolio_coin_id"] = h_portfolio_coin["_id"]
+      new_portfolio_coin["coin_id"]           = h_portfolio_coin["coin_id"]
+      new_portfolio_coin["symbol"]            = h_portfolio_coin["symbol"]
+      new_portfolio_coin["exchange"]          = h_portfolio_coin["name"]
+      new_portfolio_coin["exchange_id"]       = h_portfolio_coin["exchange_id"]
+      new_portfolio_coin["original"]          = h_portfolio_coin["original"]
+      new_portfolio_coin["price_original"]    = h_portfolio_coin["price_original"]
+      new_portfolio_coin["created_at"]        = created_at
+      new_portfolio_coin["updated_at"]        = updated_at
 
       portfolio_coin = PortfolioCoin.where(user_id: current_user.id, portfolio_coin_id: h_portfolio_coin["_id"]).first_or_initialize
 
