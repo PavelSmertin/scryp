@@ -48,7 +48,7 @@ class Job::PortfolioCalculator
 
   def calculate_portfolio_v2(user_id, portfolio)
 
-    portfolio_coins = PortfolioCoin.where(user_id: user_id, portfolio_id: portfolio.portfolio_id, removed: false)
+    portfolio_coins = PortfolioCoin.where(user_id: user_id, portfolio_id: portfolio.portfolio_id, removed: [false,nil])
 
     value_holdings = 0;
     change_24h = 0;
