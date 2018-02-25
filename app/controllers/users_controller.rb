@@ -77,7 +77,6 @@ class UsersController < ApplicationController
 
       portfolio_coin = PortfolioCoin.where(user_id: current_user.id, portfolio_coin_id: h_portfolio_coin["_id"]).first_or_initialize
 
-      new_portfolio_coin = {}
       portfolio_coin.user_id           = current_user.id
       portfolio_coin.portfolio_id      = h_portfolio_coin["portfolio_id"]
       portfolio_coin.portfolio_coin_id = h_portfolio_coin["_id"]
