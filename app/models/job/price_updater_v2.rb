@@ -3,7 +3,7 @@ require 'json'
 
 class Job::PriceUpdaterV2
 
-  CRYPTOCOMPARE_API_URI = 'https://min-api.cryptocompare.com/data/pricehistorical'
+  CRYPTOCOMPARE_API_URI = 'https://min-api.cryptocompare.com/data/pricemulti'
 
   def initialize(logger)
     @logger = logger
@@ -11,36 +11,102 @@ class Job::PriceUpdaterV2
 
   def update
 
-    coins = PortfolioCoin.where(removed: [false,nil]).distinct.limit(5).pluck(:symbol)
-    symbols = coins.join(',')
+    coins = PortfolioCoin.select(:symbol, :coin_id, :exchange_id, :exchange).where(removed: [false,nil]).distinct.index_by(&:symbol)
 
-    time_24h  = 24.hours.ago.to_time.to_i
-    time_7d   = 7.days.ago.to_time.to_i
+    parts = []
+    coins_keys = coins.keys
+    while coins_keys.size > 0 do 
+      parts << coins_keys.slice!(0..50)
+    end
+
+    exchange = "CCCAGG"
 
     begin
 
-      response_now  = get_response("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}")
-      response_24h  = get_response("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}&ts=#{time_24h}")
-      response_7d   = get_response("#{CRYPTOCOMPARE_API_URI}?fsym=USDT&tsyms=#{symbols}&ts=#{time_7d}")
+      parts.each do |part|
 
-      # {"USDT":{"BTC":0.0001114}}
+        symbols = part.join(',')
+        response  = get_response("#{CRYPTOCOMPARE_API_URI}?fsyms=#{symbols}&tsyms=BTC,USDT,USD,EUR")
+        rows = []
+        response.each do |symbol, prices|
+          rows << {
+            # :coin_id => coins[symbol].coin_id, 
+            # :exchange_id => coins[symbol].exchange_id, 
+            :exchange => exchange, 
+            :symbol => symbol, 
+            :date => Time.zone.now.at_beginning_of_day.to_s(:db), 
+            :usdt => prices["USDT"], 
+            :usd => prices["USD"], 
+            :eur => prices["EUR"], 
+            :btc => prices["BTC"], 
+            :created_at => Time.zone.now, 
+            :updated_at => Time.zone.now
+          }
 
-      hash_now  = response_now["USDT"]
-      hash_24h  = response_24h["USDT"]
-      hash_7d   = response_7d["USDT"]
-
-
-      coins = PortfolioCoin.where(symbol: coins)
-
-      p coins
-      coins.each do |coin|
-        coin.price_now = 1/hash_now[coin.symbol]  if !hash_now[coin.symbol].nil? && hash_now[coin.symbol] > 0
-        coin.price_24h = 1/hash_24h[coin.symbol]  if !hash_24h[coin.symbol].nil? && hash_24h[coin.symbol] > 0
-        coin.price_7d = 1/hash_7d[coin.symbol]    if !hash_7d[coin.symbol].nil? && hash_7d[coin.symbol] > 0
-        if !coin.save
         end
+        Price.import rows, on_duplicate_key_update: {conflict_target: [:exchange, :symbol, :date], columns: [:usdt, :usd, :eur, :btc, :updated_at]}
       end
 
+    rescue Exception => ex
+      p ex
+    end
+
+    return true;
+  end
+
+
+  def init
+
+    coins = PortfolioCoin.select(:symbol, :coin_id, :exchange_id, :exchange).where(removed: [false,nil]).distinct.index_by(&:symbol)
+
+    parts = []
+    coins_keys = coins.keys
+    while coins_keys.size > 0 do 
+      parts << coins_keys.slice!(0..50)
+    end
+
+    exchange = "CCCAGG"
+
+    begin
+
+      parts.each do |part|
+
+        symbols = part.join(',')
+        response  = get_response("#{CRYPTOCOMPARE_API_URI}?fsyms=#{symbols}&tsyms=BTC,USDT,USD,EUR")
+        rows = []
+        response.each do |symbol, prices|
+          rows << {
+            # :coin_id => coins[symbol].coin_id, 
+            # :exchange_id => coins[symbol].exchange_id, 
+            :exchange => exchange, 
+            :symbol => symbol, 
+            :date => Time.zone.now.at_beginning_of_day.to_s(:db), 
+            :usdt => prices["USDT"], 
+            :usd => prices["USD"], 
+            :eur => prices["EUR"], 
+            :btc => prices["BTC"], 
+            :created_at => Time.zone.now, 
+            :updated_at => Time.zone.now
+          }
+
+          7.times  do |i|
+            rows << {
+              :exchange => exchange, 
+              :symbol => symbol, 
+              :date => (i+1).days.ago.at_beginning_of_day.to_s(:db), 
+              :usdt => prices["USDT"], 
+              :usd => prices["USD"], 
+              :eur => prices["EUR"], 
+              :btc => prices["BTC"], 
+              :created_at => Time.zone.now, 
+              :updated_at => Time.zone.now
+            }
+          end
+
+
+        end
+        Price.import rows, on_duplicate_key_update: {conflict_target: [:exchange, :symbol, :date], columns: [:usdt, :usd, :eur, :btc, :updated_at]}
+      end
 
     rescue Exception => ex
       p ex
@@ -51,7 +117,6 @@ class Job::PriceUpdaterV2
 
   private
   def get_response(request)
-
     uri = URI(request)
     response  = Net::HTTP.get_response(uri)
 
