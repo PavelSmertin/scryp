@@ -5,7 +5,7 @@ class PortfoliosController < ApplicationController
 
 
   def index
-    public_portfolios = Portfolio.includes(:user).order("profit_24h DESC").all
+    public_portfolios = Portfolio.includes(:user).where(activated: true).order("profit_24h DESC").all
 
     public_portfolios_array = []
     public_portfolios.each { |public_portfolio| 
