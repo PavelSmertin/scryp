@@ -10,6 +10,8 @@ class PortfoliosController < ApplicationController
     public_portfolios_array = []
     public_portfolios.each { |public_portfolio| 
 
+      next if public_portfolio.coins_count <= 0
+      
       public_portfolio_element = {}
 
       public_portfolio_element["portfolio_id"]     = public_portfolio.portfolio_id
