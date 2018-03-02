@@ -74,7 +74,7 @@ class UsersController < ApplicationController
 
 
     if h["portfolio_coins"].nil? do
-      render json: {success: true, updated_at: updated_at}, status: 200
+      render json: {success: true}, status: 200
     else 
       h["portfolio_coins"].each do |h_portfolio_coin|
         created_at = DateTime.strptime(CGI::unescape(h_portfolio_coin["created_at"]), '%Y-%m-%d %H:%M:%S')
