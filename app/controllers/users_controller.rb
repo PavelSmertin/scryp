@@ -73,7 +73,7 @@ class UsersController < ApplicationController
     end
 
 
-    if h["portfolio_coins"].nil? do
+    if h["portfolio_coins"].nil?
       render json: {success: true}, status: 200
     else 
       h["portfolio_coins"].each do |h_portfolio_coin|
