@@ -49,11 +49,12 @@ class Job::PortfolioCalculator
   def calculate_portfolio_v2(user_id, portfolio)
     portfolio_coins = PortfolioCoin.where(user_id: user_id, portfolio_id: portfolio.portfolio_id, removed: [false,nil])
 
-    time_24h  = 1.days.ago.at_beginning_of_day.to_s(:db)
+    time_now  = 1.days.ago.at_beginning_of_day.to_s(:db)
+    time_24h  = 2.days.ago.at_beginning_of_day.to_s(:db)
     time_7d   = 7.days.ago.at_beginning_of_day.to_s(:db)
     exchange = "CCCAGG"
 
-    prices_now = Price.where(date: Time.zone.now.at_beginning_of_day.to_s(:db), exchange: exchange).index_by(&:symbol)
+    prices_now = Price.where(date: time_now, exchange: exchange).index_by(&:symbol)
     prices_24h = Price.where(date: time_24h, exchange: exchange).index_by(&:symbol)
     prices_7d  = Price.where(date: time_7d, exchange: exchange).index_by(&:symbol)
 
@@ -73,6 +74,7 @@ class Job::PortfolioCalculator
       portfolio_coin.change_24h     = coin_change_24h
       portfolio_coin.change_pct_24h = coin_change_pct_24h
       portfolio_coin.price_now      = price_now
+      portfolio_coin.price_24h      = price_24h
       portfolio_coin.updated_at     = Time.zone.now
 
       value_24h       += portfolio_coin.original * price_24h
