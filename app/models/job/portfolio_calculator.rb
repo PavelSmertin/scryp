@@ -69,8 +69,8 @@ class Job::PortfolioCalculator
       price_7d  = 0
 
       price_now = prices_now[symbol].usdt unless prices_now[symbol].nil?
-      price_24h = prices_24h[symbol].nil? || prices_24h[symbol].usdt <= 0 || portfolio_coin.created_at > time_24h ? price_now : prices_24h[symbol].usdt
-      price_7d  = prices_7d[symbol].nil? || prices_7d[symbol].usdt <= 0 || portfolio_coin.created_at > time_7d ? price_now : prices_7d[symbol].usdt
+      price_24h = prices_24h[symbol].nil? || prices_24h[symbol].usdt <= 0 || portfolio_coin.created_at.at_beginning_of_day > time_24h ? price_now : prices_24h[symbol].usdt
+      price_7d  = prices_7d[symbol].nil? || prices_7d[symbol].usdt <= 0 || portfolio_coin.created_at.at_beginning_of_day > time_7d ? price_now : prices_7d[symbol].usdt
 
       coin_change_24h     = price_now - price_24h 
       coin_change_pct_24h = (price_now - price_24h) * 100 / price_24h if price_24h > 0
