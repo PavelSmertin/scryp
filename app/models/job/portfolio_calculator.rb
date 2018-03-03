@@ -64,12 +64,13 @@ class Job::PortfolioCalculator
 
     portfolio_coins.each { |portfolio_coin| 
       symbol    = portfolio_coin.symbol
-      price_now = prices_now[symbol].nil? ? 0 : prices_now[symbol].usdt
-      price_24h = prices_24h[symbol].nil? ? 0 : prices_24h[symbol].usdt
-      price_7d  = prices_7d[symbol].nil? ? 0 : prices_7d[symbol].usdt
+      price_now = 0
+      price_24h = 0
+      price_7d  = 0
 
-      price_24h = price_now if price_24h == 0
-      price_7d  = price_now if price_7d == 0
+      price_now = prices_now[symbol].usdt unless prices_now[symbol].nil?
+      price_24h = prices_24h[symbol].nil? || prices_24h[symbol].usdt <= 0 || portfolio_coin.created_at > time_24h ? price_now : prices_24h[symbol].usdt
+      price_7d  = prices_7d[symbol].nil? || prices_7d[symbol].usdt <= 0 || portfolio_coin.created_at > time_7d ? price_now : prices_7d[symbol].usdt
 
       coin_change_24h     = price_now - price_24h 
       coin_change_pct_24h = (price_now - price_24h) * 100 / price_24h if price_24h > 0
@@ -88,6 +89,7 @@ class Job::PortfolioCalculator
     }
 
     portfolio.coins_count = portfolio_coins.size
+    portfolio.price_original = value_holdings
 
     change_24h = value_holdings - value_24h
     change_7d  = value_holdings - value_7d
